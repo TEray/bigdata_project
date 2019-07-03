@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>大数据</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet">
+    <style type="text/css">
+        body {
+            padding-top: 60px;
+            padding-bottom: 40px;
+        }
+    </style>
+    <link th:href="@{/css/bootstrap-responsive.css}" rel="stylesheet">
+
+</head>
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <h3 class="text-center" style="color: white"><strong>信贷数据分析系统</strong></h3>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span2 bs-docs-sidebar">
+            <ul class="nav nav-list affix">
+                <li></li>
+                <li class="nav-header">
+                    <a th:href="@{/bigdata/1_1}" style="font-size: 14px;">任务1</a>
+                </li>
+                <li class="divider"></li>
+                <li class="nav-header active">
+                    <a th:href="@{/bigdata/2_1}" style="font-size: 14px;">任务2</a>
+                </li>
+                <li class="divider"></li>
+                <li class="nav-header">
+                    <a href="#" style="font-size: 14px;">任务3</a>
+                </li>
+                <li class="divider"></li>
+                <li class="nav-header" style="font-size: 14px;">任务4</li>
+                <li><a th:href="@{/bigdata/4_1}">任务4_1</a></li>
+                <li><a th:href="@{/bigdata/4_2}">任务4_2</a></li>
+                <li><a th:href="@{/bigdata/4_3}">任务4_3</a></li>
+                <li><a th:href="@{/bigdata/4_4}">任务4_4</a></li>
+                <li><a th:href="@{/bigdata/4_5}">任务4_5</a></li>
+                <li class="divider"></li>
+                <li class="nav-header" style="font-size: 14px;">任务5</li>
+                <li><a href="#">任务5_1</a></li>
+                <li><a href="#">任务5_2</a></li>
+                <li class="divider"></li>
+                <li class="nav-header">
+                    <a href="#" style="font-size: 14px;">任务6</a>
+                </li>
+                <li class="divider"></li>
+                <li class="nav-header">
+                    <a href="#" style="font-size: 14px;">任务6</a>
+                </li>
+                <li class="divider"></li>
+                <li class="nav-header">
+                    <a href="#" style="font-size: 14px;">任务7</a>
+                </li>
+            </ul>
+        </div><!--/span-->
+        <div class="span8">
+            <div class="hero-unit">
+                <p>利用 Sqoop 将 MySQL 中的 t_user 表导入到 HDFS 中</p>
+            </div>
+            <div class="hero-unit">
+                <p>1.sqoop导入到HDFS</p>
+                <code>sqoop import --connect jdbc:mysql://hadoop01:3306/group3 --username hadoop --password hadoop --table t_user --driver com.mysql.jdbc.Driver --m 1 --target-dir /group3/t_user</code>
+            </div>
+        </div><!--/span-->
+    </div><!--/row-->
+    <hr>
+</div><!--/.fluid-container-->
+
+<script type="text/javascript" th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/echarts.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+
+
+
+</body>
+</html>

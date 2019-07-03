@@ -1,0 +1,34 @@
+Configuration:
+  status: warn
+
+  Properties: # 定义全局变量
+    Property: # 缺省配置（用于开发环境）。其他环境需要在VM参数中指定，如下：
+      - name: log.pattern
+        value: "%d{yy-MM-dd HH:mm:ss} -%5p [%-30c{1}:%-3L] : %m%n"
+      - name: old.log
+        value: "%d{yyyy-MM-dd HH:mm:ss} [%-5p][(%t)%c{1}:%L] %m%n"
+
+
+  Appenders:
+    Console:  #输出到控制台
+      - name: CONSOLE
+        target: SYSTEM_OUT
+        PatternLayout:
+          pattern: ${log.pattern}
+
+  Loggers:
+    Root:
+      level: info
+      AppenderRef:
+        - ref: CONSOLE
+    Logger: # 为com.xjj包配置特殊的Log级别，方便调试
+      - name: org.springframework.kafka
+        level: warn
+
+      - name: org.apache.kafka
+        level: warn
+
+      - name: com.example.demo.mapper
+        level: debug
+
+

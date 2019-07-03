@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>大数据</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet">
+    <style type="text/css">
+        body {
+            padding-top: 60px;
+            padding-bottom: 40px;
+        }
+    </style>
+    <link th:href="@{/css/bootstrap-responsive.css}" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <h3 class="text-center" style="color: white"><strong>信贷数据分析系统</strong></h3>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span2 bs-docs-sidebar">
+            <ul class="nav nav-list affix">
+                <li></li>
+                <li class="nav-header active">
+                    <a th:href="@{/bigdata/1_1}" style="font-size: 14px;">任务1</a>
+                </li>
+                <li class="divider"></li>
+                <li class="nav-header">
+                    <a th:href="@{/bigdata/2_1}" style="font-size: 14px;">任务2</a>
+                </li>
+                <li class="divider"></li>
+                <li class="nav-header">
+                    <a href="#" style="font-size: 14px;">任务3</a>
+                </li>
+                <li class="divider"></li>
+                <li class="nav-header" style="font-size: 14px;">任务4</li>
+                <li><a th:href="@{/bigdata/4_1}">任务4_1</a></li>
+                <li><a th:href="@{/bigdata/4_2}">任务4_2</a></li>
+                <li><a th:href="@{/bigdata/4_3}">任务4_3</a></li>
+                <li><a th:href="@{/bigdata/4_4}">任务4_4</a></li>
+                <li><a th:href="@{/bigdata/4_5}">任务4_5</a></li>
+                <li class="divider"></li>
+                <li class="nav-header" style="font-size: 14px;">任务5</li>
+                <li><a href="#">任务5_1</a></li>
+                <li><a href="#">任务5_2</a></li>
+                <li class="divider"></li>
+                <li class="nav-header">
+                    <a href="#" style="font-size: 14px;">任务6</a>
+                </li>
+                <li class="divider"></li>
+                <li class="nav-header">
+                    <a href="#" style="font-size: 14px;">任务6</a>
+                </li>
+                <li class="divider"></li>
+                <li class="nav-header">
+                    <a href="#" style="font-size: 14px;">任务7</a>
+                </li>
+            </ul>
+        </div><!--/span-->
+        <div class="span8">
+            <div class="hero-unit">
+                <p>将 t_user 用户信息到 MySQL 中，其他三个文件及，t_click，t_loan 和 t_loan_sum 导入到 HDFS 中。</p>
+            </div>
+            <div class="hero-unit">
+                <p>1.启动Mysql服务</p>
+                <code>/home/aura/script/start_mysql.sh</code>
+                <p>2.使⽤mysql链接</p>
+                <code>mysql -hhadoop01 -uhadoop -phadoop</code>
+                <p>3.连接库</p>
+                <code>use group3;</code>
+                <p>4.创建表</p>
+                <pre>
+CREATE TABLE t_user(
+uid int(11) NOT NULL DEFAULT '0',
+age int(2) DEFAULT NULL,
+sex int(2) DEFAULT NULL,
+active_date date DEFAULT NULL,
+limit_amount double DEFAULT NULL,
+PRIMARY KEY (uid)
+)</pre>
+                <p>5.把csv文件导入到mysql</p>
+                <pre>
+LOAD DATA LOCAL INFILE
+'/home/aura/group3/data/jdd_dataset/t_user.csv'
+INTO TABLE group3.t_user
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'  LINES
+TERMINATED BY '\n';</pre>
+                <p>6.把其余数据放到HDFS上</p>
+                <code>hdfs dfs -put jdd_dataset /group3<br/>
+                    hdfs dfs -put t_click.csv /group3/warehouse<br/>
+                    hdfs dfs -put t_loan.csv /group3/warehouse<br/>
+                    hdfs dfs -put t_loan_sum.csv /group3/warehouse
+                </code>
+            </div>
+        </div><!--/span-->
+    </div><!--/row-->
+    <hr>
+</div><!--/.fluid-container-->
+
+<script type="text/javascript" th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/echarts.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+
+
+
+</body>
+</html>

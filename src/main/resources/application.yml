@@ -1,0 +1,60 @@
+server:
+  port: 8082
+
+hbaseConf:
+  zookeeper : bigdata:2181
+  parent : /hbase
+  hbase: bigdata:9001
+kafkaConf:
+  queueName: test
+
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.3.114:3306/test?useUnicode=true&characterEncoding=utf8
+    username: syd001
+    password: 123456
+
+  thymeleaf:
+    cache: false
+    check-template-location: true
+    enabled: true
+    encoding: UTF-8
+    mode: HTML5
+    prefix: classpath:/templates/
+    suffix: .html
+
+  kafka:
+    bootstrap-servers: 192.168.3.120:9092
+    producer:
+      retries: 0
+      batch-size: 16384
+      buffer-memory: 33554432
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id:  consumer-default
+      auto-commit-interval: 100
+      auto-offset-reset: earliest
+      enable-auto-commit: true
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      concurrency: 1
+  #热部署生效
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main/java
+      exclude: templates/**
+
+mybatis:
+  mapper-locations: classpath:mapping/*Mapping.xml
+  type-aliases-package: com.example.demo.entity
+  configuration:
+    log-impl:
+
+#showSql
+logging:
+  config: classpath:log4j2.yml

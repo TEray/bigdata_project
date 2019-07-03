@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html style="height: 100%" lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>数据可视化</title>
+</head>
+<script type="text/javascript" th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/echarts-4.1.0/dist/echarts.min.js}"></script>
+
+<body style="height: 100%; margin: 0">
+    <h3>需求4_1</h3>
+    <button id="anaylze" onclick="doAnaylze()">通过spark计算数据</button>
+    <button id="click" onclick="getData()">点击我刷新数据!</button>
+    <br/>
+    <br/>
+    <br/>
+	<div id="chart1" style="width: 800px;height:500px;"></div>
+
+
+<script type="text/javascript">
+//饼图
+var chart1 = echarts.init(document.getElementById('chart1'));
+
+var xAxisData = [20,25,30,35,40,45,50];
+var data1 = [];
+var data2 = [];
+
+var itemStyle = {
+    normal: {
+    },
+    emphasis: {
+        barBorderWidth: 1,
+        shadowBlur: 10,
+        shadowOffsetX: 0,
+        shadowOffsetY: 0,
+        shadowColor: 'rgba(0,0,0,0.5)'
+    }
+};
+
+function makechart(data){
+    option = {
+        backgroundColor: '#eee',
+        legend: {
+            data: ['男性', '女性'],
+            align: 'left',
+            left: 10
+        },
+        xAxis: {
+            data: xAxisData,
+            name: '年龄',
+            silent: false,
+            axisLine: {onZero: true},
+            splitLine: {show: false},
+            splitArea: {show: false}
+        },
+        yAxis: {
+            name: '个数',
+            inverse: true,
+            splitArea: {show: false}
+        },
+        series: [
+            {
+                name: '男性',
+                type: 'bar',
+                stack: 'one',
+                itemStyle: itemStyle,
+                data: data.male,
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'inside'
+                    }
+                }
+            },
+            {
+                name: '女性',
+                type: 'bar',
+                stack: 'one',
+                itemStyle: itemStyle,
+                data: data.female,
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'inside'
+                    }
+                }
+            }
+        ]
+    }
+
+return option;
+}
+
+
+function getData(){
+    $.ajax({
+        url : "/charts/data",
+        type : "POST",
+        contentType:'application/json;charset=utf-8',
+        dataType : "json",
+        success : function(data) {
+            chart1.setOption(makechart(data));
+        }
+
+    });
+}
+
+function doAnaylze(){
+    $.ajax({
+        url : "/spark/any",
+        type : "POST",
+        contentType:'application/json;charset=utf-8',
+        dataType : "json",
+        success : function(data) {
+        }
+    });
+}
+
+
+</script>
+</body>
+
+</html>
