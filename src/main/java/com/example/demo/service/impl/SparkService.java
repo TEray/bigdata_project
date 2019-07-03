@@ -35,7 +35,6 @@ public class SparkService implements ISparkService {
     @Value("${spring.datasource.password}")
     public String password;
 
-
     @Override
     public String wordCount(Map<Object,Object> paramMap) throws Exception{
 
