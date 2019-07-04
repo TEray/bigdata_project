@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.KafkaSender;
+import com.example.demo.service.IHbaseService;
 import com.example.demo.service.ISparkService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,11 +12,15 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SaveMode;
 import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.execution.datasources.hbase.HBaseTableCatalog;
+import org.apache.spark.sql.execution.datasources.hbase.SparkHBaseConf;
+import org.apache.spark.sql.execution.datasources.hbase.SparkHBaseConf$;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +31,9 @@ public class SparkService implements ISparkService {
 
     @Autowired
     public KafkaSender kafkaSender;
+    @Autowired
+    public IHbaseService HbaseService;
+
     @Value("${kafkaConf.queueName}")
     public String queue;
     @Value("${spring.datasource.url}")
@@ -34,6 +42,8 @@ public class SparkService implements ISparkService {
     public String username;
     @Value("${spring.datasource.password}")
     public String password;
+
+
 
     @Override
     public String wordCount(Map<Object,Object> paramMap) throws Exception{
@@ -96,7 +106,7 @@ public class SparkService implements ISparkService {
         orderDF.createOrReplaceTempView("orders");
 
         Dataset<Row> specfiyUser =
-                spark.sql("select u.age,u.sex,count(1) count from " +
+                spark.sql("select CONCAT(u.age,'_',u.sex) age_sex,u.age,u.sex,count(1) count from " +
                         "(select uid , sum(loan_amount) amount from loan group by uid) a " +
                         "left join " +
                         "(select uid , sum(price-discount) amount from orders group by uid) b " +
@@ -188,6 +198,36 @@ public class SparkService implements ISparkService {
         write2Mysql(specfiyUser,"anayzle5");
 
         spark.stop();
+    }
+
+    @Override
+    public void spark2Hbase() {
+        SparkSession spark = createSparkSession();
+
+        Dataset<Row> specfiyUser =
+                spark.sql("");
+
+        String hbaseCatalog = "{\r\n"
+                + "\"table\":{\"namespace\":\"default\", \"name\":\"temps\", \"tableCoder\":\"PrimitiveType\"},\r\n"
+                + "\"rowkey\":\"age_sex\",\r\n" + "\"columns\":{\r\n"
+                + "\"age_sex\":{\"cf\":\"rowkey\", \"col\":\"age_sex\", \"type\":\"string\"},\r\n"
+                + "\"age\":{\"cf\":\"general\", \"col\":\"age\", \"type\":\"string\"},\r\n"
+                + "\"sex\":{\"cf\":\"general\", \"col\":\"sex\", \"type\":\"string\"},\r\n"
+                + "\"count\":{\"cf\":\"general\", \"col\":\"count\", \"type\":\"string\"}\r\n" + "}\r\n" + "}";
+
+        Map<String, String> map = new HashMap<>();
+        map.put(HBaseTableCatalog.tableCatalog(), hbaseCatalog);
+        map.put(HBaseTableCatalog.newTable(), "1");
+
+        specfiyUser.write().options(map)
+                .format("org.apache.spark.sql.execution.datasources.hbase")
+                .save();
+
+        //write2Mysql(specfiyUser,"anaylze");
+
+        spark.stop();
+
+
     }
 
     public SparkSession createSparkSession(){

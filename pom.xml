@@ -80,6 +80,11 @@
 			<version>${mysql.version}</version>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid-spring-boot-starter</artifactId>
+			<version>1.1.18</version>
+		</dependency>
 
 		<!-- 配置 log4j2 -->
 		<dependency>
@@ -96,6 +101,34 @@
 			<groupId>org.apache.hadoop</groupId>
 			<artifactId>hadoop-common</artifactId>
 			<version>${hadoop.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>guava</artifactId>
+					<groupId>com.google.guava</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-client</artifactId>
+			<version>${hadoop.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>guava</artifactId>
+					<groupId>com.google.guava</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-hdfs</artifactId>
+			<version>${hadoop.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>guava</artifactId>
+					<groupId>com.google.guava</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<!--HBASE-->
 		<dependency>
@@ -104,8 +137,8 @@
 			<version>${hbase.version}</version>
 			<exclusions>
 				<exclusion>
-					<artifactId>netty</artifactId>
-					<groupId>io.netty</groupId>
+					<artifactId>guava</artifactId>
+					<groupId>com.google.guava</groupId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -114,12 +147,6 @@
 			<groupId>org.apache.spark</groupId>
 			<artifactId>spark-core_${scala.version}</artifactId>
 			<version>${spark.version}</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>netty</artifactId>
-					<groupId>io.netty</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.spark</groupId>
@@ -146,6 +173,30 @@
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
 			<version>1.2.47</version>
+		</dependency>
+
+		<!--swagger2文档支持-->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.9.2</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.9.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.hortonworks</groupId>
+			<artifactId>shc-core</artifactId>
+			<version>1.1.0-2.1-s_2.11</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>guava</artifactId>
+					<groupId>com.google.guava</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
@@ -200,4 +251,22 @@
 		</resources>
 	</build>
 
+	<repositories>
+		<repository>
+			<!-- id必须唯一 -->
+			<id>hortonworks-repository</id>
+			<!-- 见名知意即可 -->
+			<name>hortonworks repository</name>
+			<!-- 仓库的url地址 -->
+			<url>https://repo.hortonworks.com/content/repositories/releases/</url>
+		</repository>
+		<repository>
+			<!-- id必须唯一 -->
+			<id>aliyun-repository</id>
+			<!-- 见名知意即可 -->
+			<name>aliyun repository</name>
+			<!-- 仓库的url地址 -->
+			<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+		</repository>
+	</repositories>
 </project>

@@ -8,20 +8,36 @@ hbaseConf:
 kafkaConf:
   queueName: test
 
-
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://192.168.3.114:3306/test?useUnicode=true&characterEncoding=utf8
     username: syd001
     password: 123456
+    druid:
+      initial-size: 1
+      max-active: 20
+      min-idle: 1
+      max-wait: 30000
+      pool-prepared-statements: true
+      max-open-prepared-statements: 20 #和上面的等价
+      validation-query: select 'x' from dual
+      validation-query-timeout: 30000
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 30000
+      min-evictable-idle-time-millis: 30000
+      max-evictable-idle-time-millis: 30000
+      filters: stat
+    type: com.alibaba.druid.pool.DruidDataSource
 
   thymeleaf:
     cache: false
     check-template-location: true
     enabled: true
     encoding: UTF-8
-    mode: HTML5
+    mode: HTML
     prefix: classpath:/templates/
     suffix: .html
 

@@ -1,38 +1,36 @@
 package com.example.demo.controller;
 
 import com.example.demo.service.IUserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * echarts 图标专用控制器
  * 1.返回页面模板
  * 2.处理相应的查询请求
  */
+@Api("页面接口")
 @Controller
 public class CommonController {
 
     @Autowired
     private IUserService userService;
 
-    @RequestMapping("bigdata/{page}")
+    @ApiOperation(value="获取展示页面", notes="根据{page}获取展示页面")
+    @ApiImplicitParam(name = "page", value = "页面名称", required = true, dataType = "String")
+    @GetMapping("bigdata/{page}")
     public String home(@PathVariable String page){
 
         return page;
     }
 
-    @RequestMapping("/charts")
-    public String index(){
-
-        return "charts";
-    }
 
     @ResponseBody
-    @RequestMapping(value = "/charts/data/{method}",method = RequestMethod.POST,consumes = {"application/json"})
+    @PostMapping(value = "/charts/data/{method}",consumes = {"application/json"})
     public Object data(@PathVariable String method){
 
         if ("1".equals(method)){

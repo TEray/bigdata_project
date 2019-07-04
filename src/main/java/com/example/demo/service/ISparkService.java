@@ -17,4 +17,9 @@ public interface ISparkService {
     public abstract void analyse4_4();
 
     public abstract void analyse4_5();
+
+
+    public abstract void spark2Hbase();
+
+
 }
