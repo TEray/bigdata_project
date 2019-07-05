@@ -230,13 +230,77 @@ public class SparkService implements ISparkService {
 
     }
 
+    @Override
+    public void test() {
+        SparkConf conf = new SparkConf();
+        conf.setAppName("JAVA SPARK PI...");
+        conf.setMaster("local[1]");
+        conf.set("spark.ui.port","4046");
+
+        JavaSparkContext jsc = new JavaSparkContext(conf);
+
+        JavaRDD<String> temp = jsc.textFile("DATA/sql.txt").map(s -> s.toString());
+        List<String[]> value = temp
+                .filter(s -> s.startsWith("Parameters:"))
+                .map(s -> s.substring(12,s.length()))
+                .map(s -> s.split(","))
+                .collect();
+
+
+        List<String> sql = temp
+                .filter(s -> s.startsWith("Preparing:"))
+                .map(s -> s.substring(11,s.length()))
+                .collect();
+
+        List<String> finalSql = new ArrayList<>();
+
+        for (int i = 0; i < sql.size(); i++) {
+
+            String s = sql.get(i);
+            String[] vs = value.get(i);
+            for (String v : vs) {
+
+                String values = v.substring(0,v.indexOf("(")).trim();
+
+                values = values.replaceAll("href='","href=''");
+                values = values.replaceAll("html'","html''");
+
+                String type = v.substring(v.indexOf("("),v.length()).replace('(',' ').replace(')',' ').trim();
+                if ("String".equalsIgnoreCase(type)){
+                    s = s.replaceFirst("[?]","'"+values+"'");
+                }else if("Timestamp".equalsIgnoreCase(type)){
+                    s = s.replaceFirst("[?]","to_date('"+values.substring(0,19)+"', 'yyyy-mm-dd hh24:mi:ss')");
+                }else{
+                    s = s.replaceFirst("[?]",values);
+                }
+            }
+            finalSql.add(s+";");
+        }
+        for (String s : finalSql) {
+            System.out.println(s);
+        }
+        jsc.stop();
+    }
+
+    @Override
+    public void lendLog() {
+
+
+
+
+
+
+
+
+    }
+
     public SparkSession createSparkSession(){
 
         SparkSession spark = SparkSession.builder().master("local").getOrCreate();
 
         spark.sparkContext().setLogLevel("error");
         spark.sqlContext().initializeLogIfNecessary(false);
-        spark.conf().set("spark.ui.port","4046");
+        spark.conf().set("spark.ui.port","4049");
 
         return spark;
     }

@@ -21,5 +21,8 @@ public interface ISparkService {
 
     public abstract void spark2Hbase();
 
+    public abstract void test();
 
+
+    public abstract void lendLog();
 }
